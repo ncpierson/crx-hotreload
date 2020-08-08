@@ -43,10 +43,11 @@ const watchChanges = (dir, lastTimestamp) => {
 
 }
 
-chrome.management.getSelf (self => {
+if (typeof chrome !== 'undefined' && chrome.management) {
+    chrome.management.getSelf (self => {
+        if (self.installType === 'development') {
 
-    if (self.installType === 'development') {
-
-        chrome.runtime.getPackageDirectoryEntry (dir => watchChanges (dir))
-    }
-})
+            chrome.runtime.getPackageDirectoryEntry (dir => watchChanges (dir))
+        }
+    })
+}
